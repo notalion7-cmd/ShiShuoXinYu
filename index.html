@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>我的网站</title>
+</head>
+
+<body>
+
+    <h1>自动回复网站</h1>
+
+    <input id="message">
+
+    <button onclick="reply()">
+        发送
+    </button>
+
+    <p id="result"></p>
+
+    <script>
+
+        const replies = {
+
+    "AA": "BB",
+
+    "你好": "你好呀",
+
+    "天气": "今天天气不错"
+
+};
+
+function reply() {
+
+    let text =
+        document.getElementById("message").value;
+
+    let result =
+        document.getElementById("result");
+
+    result.innerText =
+        replies[text] || "未知内容";
+}
+
+    </script>
+
+</body>
+
+</html>
