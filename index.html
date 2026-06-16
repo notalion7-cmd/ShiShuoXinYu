@@ -2,47 +2,137 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>我的网站</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>狮说新域</title>
+
+<style>
+
+@font-face {
+
+    font-family: "Song";
+
+    src: url("Font/Song.ttf") format("truetype");
+
+}
+
+@font-face {
+
+    font-family: "HandWritten";
+
+    src: url("Font/HandWritten.ttf") format("truetype");
+
+}
+
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#f8f8f6;
+}
+
+.container{
+
+    text-align:center;
+}
+
+h1{
+
+    margin-bottom:60px;
+
+    font-family:"Song", serif;
+
+    font-weight:normal;
+
+    font-size:clamp(42px,8vw,72px);
+
+    letter-spacing:0.2em;
+
+    color:#333;
+}
+
+select{
+
+    width:220px;
+
+    padding:12px;
+
+    font-size:18px;
+
+    font-family:"HandWritten", serif;
+
+    color:#444;
+
+    background:rgba(255,255,255,0.35);
+
+    border:1px solid rgba(0,0,0,0.08);
+
+    border-radius:12px;
+
+    cursor:pointer;
+}
+
+</style>
+
 </head>
 
 <body>
 
-    <h1>自动回复网站</h1>
+<div class="container">
 
-    <input id="message">
+    <h1>狮说新域</h1>
 
-    <button onclick="reply()">
-        发送
-    </button>
+    <select onchange="jump(this.value)">
 
-    <p id="result"></p>
+        <option value="">
+            进入
+        </option>
 
-    <script>
+        <option value="task.html">
+            任务书获取
+        </option>
 
-        const replies = {
+        <option value="submit.html">
+            答案提交
+        </option>
 
-    "AA": "BB",
+        <option value="hint.html">
+            提示
+        </option>
 
-    "你好": "你好呀",
+        <option value="summary.html">
+            信息汇总
+        </option>
 
-    "天气": "今天天气不错"
+    </select>
 
-};
+</div>
 
-function reply() {
+<script>
 
-    let text =
-        document.getElementById("message").value;
+function jump(page){
 
-    let result =
-        document.getElementById("result");
+    if(page){
 
-    result.innerText =
-        replies[text] || "未知内容";
+        window.location.href = page;
+
+    }
+
 }
 
-    </script>
+</script>
 
 </body>
 
