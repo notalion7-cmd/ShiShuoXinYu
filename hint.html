@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>提示</title>
+
+<style>
+
+@font-face {
+
+    font-family: "Song";
+
+    src: url("Font/Song.ttf") format("truetype");
+
+}
+
+@font-face {
+
+    font-family: "HandWritten";
+
+    src: url("Font/HandWritten.ttf") format("truetype");
+
+}
+
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    background:#f8f8f6;
+
+    font-family:"Song", serif;
+}
+
+/* 左上角导航 */
+
+.navigation{
+
+    position:fixed;
+
+    top:25px;
+
+    left:25px;
+}
+
+.navigation select{
+
+    padding:10px 15px;
+
+    font-size:16px;
+
+    font-family:"HandWritten", serif;
+
+    color:#444;
+
+    background:rgba(255,255,255,0.35);
+
+    border:1px solid rgba(0,0,0,0.08);
+
+    border-radius:12px;
+
+    cursor:pointer;
+}
+
+/* 主体 */
+
+.container{
+
+    width:min(800px,90vw);
+
+    margin:120px auto;
+}
+
+.hint-block{
+
+    margin-bottom:25px;
+}
+
+.hint-button{
+
+    padding:12px 24px;
+
+    background:rgba(255,255,255,0.35);
+
+    border:1px solid rgba(0,0,0,0.08);
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-family:"Song", serif;
+
+    font-size:20px;
+
+    color:#444;
+
+    transition:0.3s;
+}
+
+.hint-button:hover{
+
+    background:rgba(255,255,255,0.65);
+}
+
+.hint-text{
+
+    margin-top:12px;
+
+    margin-left:10px;
+
+    color:#333;
+
+    font-size:18px;
+
+    display:none;
+}
+
+/* 弹窗背景 */
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(0,0,0,0.3);
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+/* 弹窗 */
+
+.modal-content{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+    width:320px;
+
+    font-size:18px;
+}
+
+.modal-buttons{
+
+    margin-top:25px;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+}
+
+.no-button{
+
+    padding:10px 24px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#d9d9d9;
+
+    cursor:pointer;
+
+    font-family:"Song", serif;
+}
+
+.yes-button{
+
+    padding:10px 24px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#555;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-family:"Song", serif;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navigation">
+
+    <select onchange="jump(this.value)">
+
+        <option value="">
+            跳转至
+        </option>
+
+        <option value="task.html">
+            任务书获取
+        </option>
+
+        <option value="submit.html">
+            答案提交
+        </option>
+
+        <option value="summary.html">
+            信息汇总
+        </option>
+
+    </select>
+
+</div>
+
+<div class="container">
+
+    <div class="hint-block">
+
+        <button
+            class="hint-button"
+            onclick="openModal('hint1')">
+
+            AAA
+
+        </button>
+
+        <div
+            id="hint1"
+            class="hint-text">
+
+            aaa
+
+        </div>
+
+    </div>
+
+    <div class="hint-block">
+
+        <button
+            class="hint-button"
+            onclick="openModal('hint2')">
+
+            BBB
+
+        </button>
+
+        <div
+            id="hint2"
+            class="hint-text">
+
+            bbb
+
+        </div>
+
+    </div>
+
+</div>
+
+<div
+    id="modal"
+    class="modal">
+
+    <div class="modal-content">
+
+        是否确定解锁该提示？
+
+        <div class="modal-buttons">
+
+            <button
+                class="no-button"
+                onclick="closeModal()">
+
+                否
+
+            </button>
+
+            <button
+                class="yes-button"
+                onclick="unlockHint()">
+
+                是
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let currentHint = null;
+
+/* 页面跳转 */
+
+function jump(page){
+
+    if(page){
+
+        window.location.href = page;
+
+    }
+
+}
+
+/* 打开弹窗 */
+
+function openModal(id){
+
+    currentHint = id;
+
+    document.getElementById("modal")
+        .style.display = "flex";
+}
+
+/* 关闭弹窗 */
+
+function closeModal(){
+
+    document.getElementById("modal")
+        .style.display = "none";
+}
+
+/* 解锁提示 */
+
+function unlockHint(){
+
+    document.getElementById(currentHint)
+        .style.display = "block";
+
+    localStorage.setItem(
+        currentHint,
+        "unlocked"
+    );
+
+    closeModal();
+}
+
+/* 页面加载时恢复存档 */
+
+window.onload = function(){
+
+    const hintIds = [
+
+        "hint1",
+        "hint2"
+
+    ];
+
+    hintIds.forEach(id => {
+
+        if(
+            localStorage.getItem(id)
+            === "unlocked"
+        ){
+
+            document.getElementById(id)
+                .style.display = "block";
+
+        }
+
+    });
+
+};
+
+</script>
+
+</body>
+
+</html>

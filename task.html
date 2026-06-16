@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>任务书获取</title>
+
+<style>
+
+@font-face {
+
+    font-family: "Song";
+
+    src: url("Font/Song.ttf") format("truetype");
+
+}
+
+@font-face {
+
+    font-family: "HandWritten";
+
+    src: url("Font/HandWritten.ttf") format("truetype");
+
+}
+
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#f8f8f6;
+
+    font-family:"Song", serif;
+}
+
+/* 左上角导航 */
+
+.navigation{
+
+    position:fixed;
+
+    top:25px;
+
+    left:25px;
+}
+
+.navigation select{
+
+    padding:10px 15px;
+
+    font-size:16px;
+
+    font-family:"HandWritten", serif;
+
+    color:#444;
+
+    background:rgba(255,255,255,0.35);
+
+    border:1px solid rgba(0,0,0,0.08);
+
+    border-radius:12px;
+
+    cursor:pointer;
+}
+
+/* 中央内容 */
+
+.container{
+
+    text-align:center;
+}
+
+.tip{
+
+    font-family:"HandWritten", serif;
+
+    font-size:clamp(16px,2vw,22px);
+
+    color:#666;
+
+    margin-bottom:30px;
+}
+
+.download-button{
+
+    display:inline-block;
+
+    padding:14px 36px;
+
+    text-decoration:none;
+
+    color:#444;
+
+    font-family:"Song", serif;
+
+    font-size:clamp(18px,3vw,28px);
+
+    background:rgba(255,255,255,0.35);
+
+    border:1px solid rgba(0,0,0,0.08);
+
+    border-radius:12px;
+
+    transition:0.3s;
+}
+
+.download-button:hover{
+
+    background:rgba(255,255,255,0.65);
+
+    transform:translateY(-2px);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navigation">
+
+    <select onchange="jump(this.value)">
+
+        <option value="">
+            跳转至
+        </option>
+
+        <option value="submit.html">
+            答案提交
+        </option>
+
+        <option value="hint.html">
+            提示
+        </option>
+
+        <option value="summary.html">
+            信息汇总
+        </option>
+
+    </select>
+
+</div>
+
+<div class="container">
+
+    <div class="tip">
+        你可以点此获得完整任务书的 PDF 版本
+    </div>
+
+    <a
+        class="download-button"
+        href="taskbook.pdf"
+        download>
+
+        下载任务书
+
+    </a>
+
+</div>
+
+<script>
+
+function jump(page){
+
+    if(page){
+
+        window.location.href = page;
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>
