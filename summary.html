@@ -208,17 +208,31 @@ fetch("questions.csv")
 
     });
 
-    lines.forEach(line => {
+lines.forEach(line => {
 
-        const parts = line.split(",");
+    const parts =
+        line.split(",");
 
-        const id = parts[0].trim();
+    if(parts.length < 5)
+        return;
 
-        const area = parts[4].trim();
+    const id =
+        parts[0]
+        .replace(/\r/g,"")
+        .trim();
+
+    const area =
+        parts[4]
+        .replace(/\r/g,"")
+        .trim();
+
+    if(grouped[area]){
 
         grouped[area].push(id);
 
-    });
+    }
+
+});
 
     const container =
         document.getElementById("content");
