@@ -32,16 +32,31 @@ body{
 }
 
 .entry{
-    margin-bottom:20px;
+    margin-bottom:15px;
     padding-left:20px;
+    /* 关键修改：让关卡 ID 和内容在一行横向排列 */
+    display: flex;
+    align-items: flex-start;
 }
 
 .entry-id{
     font-size:18px;
+    font-weight: bold;
+    /* 固定 ID 宽度，保证后面的提示内容对齐 */
+    min-width: 100px; 
+    flex-shrink: 0;
 }
 
 .entry-content{
     color:#666;
+    font-size:18px;
+    word-break: break-all;
+}
+
+/* 针对未解锁文本的样式（可选，让问号看起来更淡一点） */
+.locked {
+    color: #ccc;
+    letter-spacing: 2px;
 }
 
 </style>
@@ -56,42 +71,52 @@ body{
 
 <script>
 
-const areaOrder = ["启程","区域A","区域B","区域C","区域D","区域X","PUZZLE","终章"];
+// 保持你期望的页面显示顺序
+const areaOrder = ["启程","区域A","区域B","区域C","区域D","PUZZLE"];
+
+// 建立前端显示名称与 CSV 里的 Area 字段的映射关系
+const areaMapping = {
+    "启程": "启程",
+    "区域A": "A",
+    "区域B": "B",
+    "区域C": "C",
+    "区域D": "D",
+    "PUZZLE": "PUZZLE"
+};
 
 fetch("questions.csv")
 .then(r => r.text())
 .then(csv => {
 
     const lines = csv.trim().split("\n");
-    lines.shift();
+    lines.shift(); // 移除表头
 
     let grouped = {};
-    areaOrder.forEach(a => grouped[a] = []);
+    // 根据映射，把 CSV 的真实区域名作为 group 的 key
+    Object.values(areaMapping).forEach(a => grouped[a] = []);
 
     lines.forEach(line => {
+        if (!line.trim()) return; // 略过空行
 
         const parts = line.split(",");
-
         const id = parts[0].trim().toUpperCase();
         const area = parts[4].trim();
 
         if(grouped[area]){
             grouped[area].push(id);
         }
-
     });
 
     const container = document.getElementById("content");
 
-    areaOrder.forEach(area => {
+    areaOrder.forEach(areaDisplay => {
+        const csvAreaName = areaMapping[areaDisplay];
+        let html = `<div class="section"><div class="section-title">${areaDisplay}</div>`;
 
-        let html = `<div class="section"><div class="section-title">${area}</div>`;
-
-        /* PUZZLE */
-        if(area === "PUZZLE"){
+        /* PUZZLE 区域特殊处理 */
+        if(areaDisplay === "PUZZLE"){
 
             const puzzleIds = ["PUZZLE1","PUZZLE2","PUZZLE3","PUZZLE4"];
-
             const puzzleHints = [
                 "本次探索的某个区域的名称也在这个公园名称里出现了",
                 "1000",
@@ -100,39 +125,37 @@ fetch("questions.csv")
             ];
 
             puzzleIds.forEach((id, i) => {
-
-                if(localStorage.getItem(id)){
-
-                    html += `
-                        <div class="entry">
-                            <div class="entry-id">提示${i+1}</div>
-                            <div class="entry-content">${puzzleHints[i]}</div>
-                        </div>
-                    `;
-                }
-            });
-
-        } else {
-
-            grouped[area].forEach(id => {
-
-                const text = localStorage.getItem(id);
-
-                if(!text) return;
+                const hasUnlocked = localStorage.getItem(id);
+                // 如果解锁了显示硬编码提示，没解锁显示 ？？？
+                const contentText = hasUnlocked ? puzzleHints[i] : `<span class="locked">？？？</span>`;
 
                 html += `
                     <div class="entry">
-                        <div class="entry-id">${id}</div>
-                        <div class="entry-content">${text}</div>
+                        <div class="entry-id">提示${i+1}</div>
+                        <div class="entry-content">${contentText}</div>
                     </div>
                 `;
             });
 
+        } else {
+            /* 普通区域处理 */
+            grouped[csvAreaName].forEach(id => {
+                const text = localStorage.getItem(id);
+                // 修改点：不再使用 if(!text) return 隐去。
+                // 而是判断如果没有 text，则显示为 "？？？"
+                const contentText = text ? text : `<span class="locked">？？？</span>`;
+
+                html += `
+                    <div class="entry">
+                        <div class="entry-id">${id}</div>
+                        <div class="entry-content">${contentText}</div>
+                    </div>
+                `;
+            });
         }
 
         html += `</div>`;
         container.innerHTML += html;
-
     });
 
 });
