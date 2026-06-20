@@ -9,10 +9,56 @@
 
 <style>
 
+@font-face {
+    font-family: "Song";
+    src: url("Font/Song.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "HandWritten";
+    src: url("Font/HandWritten.ttf") format("truetype");
+}
+
 body{
     margin:0;
     background:#f8f8f6;
     font-family:"Song", serif;
+}
+
+/* 🌟 新增：左上角原生下拉框容器与样式 */
+.nav-select-container {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    z-index: 1000;
+}
+
+.nav-select {
+    padding: 10px 30px 10px 18px;
+    font-size: 16px;
+    font-family: "HandWritten", serif;
+    color: #444;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    /* 引入一个精致的自定义小箭头 */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0,0 L5,5 L10,0' fill='none' stroke='%23444' stroke-width='1.5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+.nav-select:hover {
+    background-color: rgba(255,255,255,0.8);
+}
+
+.nav-select option {
+    font-family: "Song", serif;
+    background: #fff;
+    color: #444;
 }
 
 .container{
@@ -65,11 +111,29 @@ body{
 
 <body>
 
+<div class="nav-select-container">
+    <select class="nav-select" onchange="navigate(this)">
+        <option value="" disabled>快速导航</option>
+        <option value="index.html">首页</option>
+        <option value="task.html">工具箱</option>
+        <option value="hint.html">提示</option>
+        <option value="submit.html">答案提交</option>
+        <option value="summary.html" selected>信息汇总</option> </select>
+</div>
+
 <div class="container">
     <div id="content"></div>
 </div>
 
 <script>
+
+// 🌟 新增：下拉框跳转函数
+function navigate(selectElement) {
+    const url = selectElement.value;
+    if (url) {
+        window.location.href = url;
+    }
+}
 
 // 保持你期望的页面显示顺序
 const areaOrder = ["启程","区域A","区域B","区域C","区域D","PUZZLE"];
