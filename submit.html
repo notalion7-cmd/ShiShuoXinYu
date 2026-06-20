@@ -2,256 +2,112 @@
 <html>
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>答案提交</title>
 
 <style>
 
 @font-face {
-    font-family: "Song";
-    src: url("Font/Song.ttf") format("truetype");
+    font-family:"Song";
+    src:url("Font/Song.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: "HandWritten";
-    src: url("Font/HandWritten.ttf") format("truetype");
+    font-family:"HandWritten";
+    src:url("Font/HandWritten.ttf") format("truetype");
 }
 
 body{
-
     margin:0;
-
     min-height:100vh;
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     background:#f8f8f6;
-
     font-family:"Song", serif;
 }
 
-/* 导航菜单 */
-
+/* 菜单 */
 .menu{
-
     position:fixed;
-
     top:25px;
-
     left:25px;
-
     z-index:1000;
-
 }
 
 .menu-button{
-
     padding:10px 18px;
-
     font-size:16px;
-
     font-family:"HandWritten", serif;
-
-    color:#444;
-
     background:rgba(255,255,255,0.5);
-
     border:1px solid rgba(0,0,0,0.08);
-
     border-radius:12px;
-
     cursor:pointer;
-
 }
 
 .menu-list{
-
     display:none;
-
     margin-top:8px;
-
     background:rgba(255,255,255,0.95);
-
     border-radius:12px;
-
     overflow:hidden;
-
     min-width:140px;
-
     box-shadow:0 4px 12px rgba(0,0,0,0.1);
-
 }
 
 .menu-list a{
-
     display:block;
-
     padding:12px 18px;
-
     text-decoration:none;
-
     color:#444;
-
-    font-family:"Song", serif;
-
 }
-
-.menu-list a:hover{
-
-    background:rgba(0,0,0,0.05);
-
-}
-
-/* 主体 */
 
 .container{
-
-    width:min(700px,90vw);
-
     text-align:center;
-}
-
-.tip{
-
-    font-family:"HandWritten", serif;
-
-    font-size:clamp(14px,2vw,20px);
-
-    color:#666;
-
-    margin-bottom:25px;
+    width:min(700px,90vw);
 }
 
 input{
-
-    width:min(500px,90%);
-
+    width:90%;
     padding:14px;
-
     font-size:18px;
-
-    font-family:"Song", serif;
-
-    border:1px solid rgba(0,0,0,0.08);
-
-    border-radius:12px;
-
-    background:rgba(255,255,255,0.35);
-
-    box-sizing:border-box;
 }
 
-button.submit-button{
-
+button{
     margin-top:20px;
-
     padding:12px 30px;
-
-    font-family:"Song", serif;
-
-    font-size:18px;
-
-    color:#444;
-
-    background:rgba(255,255,255,0.35);
-
-    border:1px solid rgba(0,0,0,0.08);
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    transition:0.3s;
-}
-
-button.submit-button:hover{
-
-    background:rgba(255,255,255,0.65);
-
-    transform:translateY(-2px);
 }
 
 #result{
-
-    margin-top:35px;
-
-    font-size:22px;
-
-    color:#333;
-
-    min-height:50px;
-
-    line-height:1.8;
+    margin-top:30px;
+    font-size:20px;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="menu">
+    <button class="menu-button" onclick="toggleMenu()">跳转至</button>
 
-    <button
-        class="menu-button"
-        onclick="toggleMenu()">
-
-        跳转至
-
-    </button>
-
-    <div
-        id="menuList"
-        class="menu-list">
-
-        <a href="index.html">
-            首页
-        </a>
-
-        <a href="task.html">
-            工具箱
-        </a>
-
-        <a href="hint.html">
-            提示
-        </a>
-
-        <a href="summary.html">
-            信息汇总
-        </a>
-
+    <div id="menuList" class="menu-list">
+        <a href="index.html">首页</a>
+        <a href="task.html">工具箱</a>
+        <a href="hint.html">提示</a>
+        <a href="summary.html">信息汇总</a>
     </div>
-
 </div>
 
 <div class="container">
 
-    <div class="tip">
-        请按规定格式提交（题号 空格 答案）
-    </div>
+    <div>请按格式提交：题号 空格 答案</div>
 
-    <input
-        id="answer"
-        placeholder="例如：A1 273">
+    <input id="answer" placeholder="A1 123">
 
-    <br>
-
-    <button
-        class="submit-button"
-        onclick="checkAnswer()">
-
-        提交
-
-    </button>
+    <button onclick="checkAnswer()">提交</button>
 
     <div id="result"></div>
 
@@ -260,48 +116,18 @@ button.submit-button:hover{
 <script>
 
 function toggleMenu(){
-
-    const menu =
-        document.getElementById("menuList");
-
-    menu.style.display =
-        menu.style.display === "block"
-        ? "none"
-        : "block";
-
+    const m = document.getElementById("menuList");
+    m.style.display = m.style.display === "block" ? "none" : "block";
 }
 
-document.addEventListener("click", function(event){
-
-    const menu =
-        document.getElementById("menuList");
-
-    const button =
-        document.querySelector(".menu-button");
-
-    if(
-        menu &&
-        !menu.contains(event.target)
-        &&
-        !button.contains(event.target)
-    ){
-
-        menu.style.display = "none";
-
-    }
-
-});
-
+/* CSV */
 let questions = [];
 
 fetch("questions.csv")
-
-.then(response => response.text())
-
+.then(r => r.text())
 .then(csv => {
 
     const lines = csv.trim().split("\n");
-
     lines.shift();
 
     lines.forEach(line => {
@@ -309,17 +135,11 @@ fetch("questions.csv")
         const parts = line.split(",");
 
         questions.push({
-
-            id: parts[0].trim(),
-
-            question: parts[1].trim(),
-
-            answer: parts[2].trim(),
-
-            hint: parts[3].trim(),
-
-            area: parts[4].trim()
-
+            id: parts[0].trim().toUpperCase(),
+            question: parts[1],
+            answer: parts[2],
+            hint: parts[3],
+            area: parts[4]
         });
 
     });
@@ -328,129 +148,41 @@ fetch("questions.csv")
 
 function checkAnswer(){
 
-    const input =
-        document.getElementById("answer")
-        .value
-        .trim();
-
-    const pieces =
-        input.split(" ");
+    const input = document.getElementById("answer").value.trim();
+    const pieces = input.split(" ");
 
     if(pieces.length < 2){
-
-        document.getElementById("result")
-            .innerText =
-            "格式错误";
-
+        document.getElementById("result").innerText = "格式错误";
         return;
-
     }
 
-    const id =
-        pieces[0];
+    const id = pieces[0].trim().toUpperCase();
+    const answer = pieces.slice(1).join(" ");
 
-    const answer =
-        pieces.slice(1).join(" ");
+    const q = questions.find(x => x.id === id);
 
-    const question =
-        questions.find(
-            q => q.id === id
-        );
-
-    if(!question){
-
-        document.getElementById("result")
-            .innerText =
-            "题号不存在";
-
+    if(!q){
+        document.getElementById("result").innerText = "题号不存在";
         return;
-
     }
 
-    if(answer !== question.answer){
-
-        document.getElementById("result")
-            .innerText =
-            "答案错误";
-
+    if(answer !== q.answer){
+        document.getElementById("result").innerText = "答案错误";
         return;
-
     }
 
     if(localStorage.getItem(id)){
-
-        document.getElementById("result")
-            .innerText =
-            "该信息已收录";
-
+        document.getElementById("result").innerText = "已解锁";
         return;
-
     }
 
-    const puzzleIds = [
+    localStorage.setItem(id, q.hint);
 
-        "PUZZLE1",
-        "PUZZLE2",
-        "PUZZLE3",
-        "PUZZLE4"
-
-    ];
-
-    if(puzzleIds.includes(id)){
-
-        let solvedCount = 0;
-
-        puzzleIds.forEach(pid => {
-
-            if(localStorage.getItem(pid)){
-
-                solvedCount++;
-
-            }
-
-        });
-
-        const puzzleHints = [
-
-            "本次探索的某个区域的名称也在这个公园名称里出现了",
-
-            "1000",
-
-            "秋千",
-
-            "龙吴路"
-
-        ];
-
-        const unlockedHint =
-            puzzleHints[solvedCount];
-
-        localStorage.setItem(
-            id,
-            unlockedHint
-        );
-
-        document.getElementById("result")
-            .innerHTML =
-            `提交成功<br><br>${unlockedHint}`;
-
-        return;
-
-    }
-
-    localStorage.setItem(
-        id,
-        question.hint
-    );
-
-    document.getElementById("result")
-        .innerHTML =
-        `提交成功<br><br>${question.hint}`;
-
+    document.getElementById("result").innerHTML =
+        "提交成功<br><br>" + q.hint;
 }
 
 </script>
 
 </body>
-
 </html>
