@@ -41,11 +41,13 @@ body{
     align-items:center;
 
     background:#f8f8f6;
+
 }
 
 .container{
 
     text-align:center;
+
 }
 
 h1{
@@ -61,9 +63,20 @@ h1{
     letter-spacing:0.2em;
 
     color:#333;
+
 }
 
-select{
+/* 自定义菜单 */
+
+.menu{
+
+    display:inline-block;
+
+    position:relative;
+
+}
+
+.menu-button{
 
     width:220px;
 
@@ -82,6 +95,53 @@ select{
     border-radius:12px;
 
     cursor:pointer;
+
+}
+
+.menu-list{
+
+    display:none;
+
+    position:absolute;
+
+    top:100%;
+
+    left:0;
+
+    width:220px;
+
+    margin-top:8px;
+
+    background:rgba(255,255,255,0.95);
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+
+}
+
+.menu-list a{
+
+    display:block;
+
+    padding:12px;
+
+    text-decoration:none;
+
+    color:#444;
+
+    font-family:"Song", serif;
+
+    transition:0.2s;
+
+}
+
+.menu-list a:hover{
+
+    background:rgba(0,0,0,0.05);
+
 }
 
 </style>
@@ -94,43 +154,80 @@ select{
 
     <h1>狮说新域</h1>
 
-    <select onchange="jump(this.value)">
+    <div class="menu">
 
-        <option value="">
+        <button
+            class="menu-button"
+            onclick="toggleMenu()">
+
             进入
-        </option>
 
-        <option value="task.html">
-            任务书获取
-        </option>
+        </button>
 
-        <option value="submit.html">
-            答案提交
-        </option>
+        <div
+            id="menuList"
+            class="menu-list">
 
-        <option value="hint.html">
-            提示
-        </option>
+            <a href="task.html">
+                工具箱
+            </a>
 
-        <option value="summary.html">
-            信息汇总
-        </option>
+            <a href="submit.html">
+                答案提交
+            </a>
 
-    </select>
+            <a href="hint.html">
+                提示
+            </a>
+
+            <a href="summary.html">
+                信息汇总
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
 
 <script>
 
-function jump(page){
+function toggleMenu(){
 
-    if(page){
+    const menu =
+        document.getElementById("menuList");
 
-        window.location.href = page;
+    if(menu.style.display === "block"){
+
+        menu.style.display = "none";
+
+    }else{
+
+        menu.style.display = "block";
 
     }
 
 }
+
+document.addEventListener("click", function(event){
+
+    const menu =
+        document.getElementById("menuList");
+
+    const button =
+        document.querySelector(".menu-button");
+
+    if(
+        !menu.contains(event.target)
+        &&
+        !button.contains(event.target)
+    ){
+
+        menu.style.display = "none";
+
+    }
+
+});
 
 </script>
 

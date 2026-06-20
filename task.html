@@ -8,7 +8,7 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>任务书获取</title>
+<title>工具箱</title>
 
 <style>
 
@@ -43,22 +43,26 @@ body{
     background:#f8f8f6;
 
     font-family:"Song", serif;
+
 }
 
-/* 左上角导航 */
+/* 导航菜单 */
 
-.navigation{
+.menu{
 
     position:fixed;
 
     top:25px;
 
     left:25px;
+
+    z-index:1000;
+
 }
 
-.navigation select{
+.menu-button{
 
-    padding:10px 15px;
+    padding:10px 18px;
 
     font-size:16px;
 
@@ -66,38 +70,39 @@ body{
 
     color:#444;
 
-    background:rgba(255,255,255,0.35);
+    background:rgba(255,255,255,0.5);
 
     border:1px solid rgba(0,0,0,0.08);
 
     border-radius:12px;
 
     cursor:pointer;
+
 }
 
-/* 中央内容 */
+.menu-list{
 
-.container{
+    display:none;
 
-    text-align:center;
+    margin-top:8px;
+
+    background:rgba(255,255,255,0.95);
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    min-width:140px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+
 }
 
-.tip{
+.menu-list a{
 
-    font-family:"HandWritten", serif;
+    display:block;
 
-    font-size:clamp(16px,2vw,22px);
-
-    color:#666;
-
-    margin-bottom:30px;
-}
-
-.download-button{
-
-    display:inline-block;
-
-    padding:14px 36px;
+    padding:12px 18px;
 
     text-decoration:none;
 
@@ -105,22 +110,110 @@ body{
 
     font-family:"Song", serif;
 
-    font-size:clamp(18px,3vw,28px);
+    transition:0.2s;
+
+}
+
+.menu-list a:hover{
+
+    background:rgba(0,0,0,0.05);
+
+}
+
+/* 主体 */
+
+.container{
+
+    width:min(700px,90vw);
+
+    text-align:center;
+
+}
+
+.title{
+
+    font-size:clamp(40px,5vw,64px);
+
+    color:#333;
+
+    margin-bottom:50px;
+
+}
+
+.tool-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin:25px 0;
+
+    padding:18px 24px;
 
     background:rgba(255,255,255,0.35);
 
     border:1px solid rgba(0,0,0,0.08);
 
-    border-radius:12px;
+    border-radius:14px;
 
-    transition:0.3s;
 }
 
-.download-button:hover{
+.tool-name{
 
-    background:rgba(255,255,255,0.65);
+    font-size:24px;
+
+    color:#444;
+
+}
+
+.tool-button{
+
+    padding:10px 24px;
+
+    text-decoration:none;
+
+    color:#444;
+
+    font-size:18px;
+
+    background:rgba(255,255,255,0.5);
+
+    border:1px solid rgba(0,0,0,0.08);
+
+    border-radius:10px;
+
+    transition:0.3s;
+
+}
+
+.tool-button:hover{
+
+    background:rgba(255,255,255,0.8);
 
     transform:translateY(-2px);
+
+}
+
+/* 手机适配 */
+
+@media (max-width:600px){
+
+    .tool-row{
+
+        flex-direction:column;
+
+        gap:15px;
+
+    }
+
+    .tool-name{
+
+        font-size:20px;
+
+    }
+
 }
 
 </style>
@@ -129,58 +222,137 @@ body{
 
 <body>
 
-<div class="navigation">
+<div class="menu">
 
-    <select onchange="jump(this.value)">
+    <button
+        class="menu-button"
+        onclick="toggleMenu()">
 
-        <option value="">
-            跳转至
-        </option>
+        跳转至
 
-        <option value="submit.html">
+    </button>
+
+    <div
+        id="menuList"
+        class="menu-list">
+
+        <a href="index.html">
+            首页
+        </a>
+
+        <a href="submit.html">
             答案提交
-        </option>
+        </a>
 
-        <option value="hint.html">
+        <a href="hint.html">
             提示
-        </option>
+        </a>
 
-        <option value="summary.html">
+        <a href="summary.html">
             信息汇总
-        </option>
+        </a>
 
-    </select>
+    </div>
 
 </div>
 
 <div class="container">
 
-    <div class="tip">
-        你可以点此获得完整任务书的 PDF 版本
+    <div class="title">
+        工具箱
     </div>
 
-    <a
-        class="download-button"
-        href="taskbook.pdf"
-        download>
+    <div class="tool-row">
 
-        下载任务书
+        <div class="tool-name">
+            任务书获取
+        </div>
 
-    </a>
+        <a
+            class="tool-button"
+            href="taskbook.pdf"
+            download>
+
+            下载
+
+        </a>
+
+    </div>
+
+    <div class="tool-row">
+
+        <div class="tool-name">
+            Key高清图片获取
+        </div>
+
+        <a
+            class="tool-button"
+            href="key.jpg"
+            download>
+
+            下载
+
+        </a>
+
+    </div>
+
+    <div class="tool-row">
+
+        <div class="tool-name">
+            地铁线路图
+        </div>
+
+        <a
+            class="tool-button"
+            href="https://www.metroman.cn/maps/shanghai"
+            target="_blank">
+
+            前往
+
+        </a>
+
+    </div>
 
 </div>
 
 <script>
 
-function jump(page){
+function toggleMenu(){
 
-    if(page){
+    const menu =
+        document.getElementById("menuList");
 
-        window.location.href = page;
+    if(menu.style.display === "block"){
+
+        menu.style.display = "none";
+
+    }else{
+
+        menu.style.display = "block";
 
     }
 
 }
+
+document.addEventListener("click", function(event){
+
+    const menu =
+        document.getElementById("menuList");
+
+    const button =
+        document.querySelector(".menu-button");
+
+    if(
+        !menu.contains(event.target)
+        &&
+        !button.contains(event.target)
+    ){
+
+        menu.style.display = "none";
+
+    }
+
+});
 
 </script>
 

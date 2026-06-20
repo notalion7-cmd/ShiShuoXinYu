@@ -4,205 +4,146 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>提示</title>
 
 <style>
 
 @font-face {
-
     font-family: "Song";
-
     src: url("Font/Song.ttf") format("truetype");
-
 }
 
 @font-face {
-
     font-family: "HandWritten";
-
     src: url("Font/HandWritten.ttf") format("truetype");
-
 }
 
 body{
-
     margin:0;
-
-    min-height:100vh;
-
     background:#f8f8f6;
-
     font-family:"Song", serif;
 }
 
-/* 左上角导航 */
-
-.navigation{
-
+/* ===== 菜单 ===== */
+.menu{
     position:fixed;
-
     top:25px;
-
     left:25px;
+    z-index:1000;
 }
 
-.navigation select{
-
-    padding:10px 15px;
-
+.menu-button{
+    padding:10px 18px;
     font-size:16px;
-
     font-family:"HandWritten", serif;
-
-    color:#444;
-
-    background:rgba(255,255,255,0.35);
-
+    background:rgba(255,255,255,0.5);
     border:1px solid rgba(0,0,0,0.08);
-
     border-radius:12px;
-
     cursor:pointer;
 }
 
-/* 主体 */
+.menu-list{
+    display:none;
+    margin-top:8px;
+    background:rgba(255,255,255,0.95);
+    border-radius:12px;
+    min-width:140px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.menu-list a{
+    display:block;
+    padding:12px 18px;
+    text-decoration:none;
+    color:#444;
+}
+
+.menu-list a:hover{
+    background:rgba(0,0,0,0.05);
+}
+
+/* ===== 主体 ===== */
 
 .container{
+    width:min(1000px,90vw);
+    margin:100px auto;
+}
 
-    width:min(800px,90vw);
+.section{
+    margin-bottom:50px;
+}
 
-    margin:120px auto;
+.section-title{
+    font-size:30px;
+    margin-bottom:20px;
+    border-bottom:1px solid rgba(0,0,0,0.1);
+    padding-bottom:10px;
 }
 
 .hint-block{
-
-    margin-bottom:25px;
+    margin-bottom:18px;
 }
 
 .hint-button{
-
     padding:12px 24px;
-
     background:rgba(255,255,255,0.35);
-
     border:1px solid rgba(0,0,0,0.08);
-
     border-radius:12px;
-
     cursor:pointer;
-
-    font-family:"Song", serif;
-
-    font-size:20px;
-
-    color:#444;
-
-    transition:0.3s;
-}
-
-.hint-button:hover{
-
-    background:rgba(255,255,255,0.65);
+    font-size:18px;
 }
 
 .hint-text{
-
-    margin-top:12px;
-
+    margin-top:10px;
     margin-left:10px;
-
-    color:#333;
-
-    font-size:18px;
-
     display:none;
+    color:#333;
 }
 
-/* 弹窗背景 */
+/* ===== 弹窗 ===== */
 
 .modal{
-
     display:none;
-
     position:fixed;
-
     top:0;
-
     left:0;
-
     width:100%;
-
     height:100%;
-
     background:rgba(0,0,0,0.3);
-
     justify-content:center;
-
     align-items:center;
 }
 
-/* 弹窗 */
-
 .modal-content{
-
     background:white;
-
     padding:30px;
-
     border-radius:15px;
-
     text-align:center;
-
     width:320px;
-
-    font-size:18px;
 }
 
 .modal-buttons{
-
-    margin-top:25px;
-
+    margin-top:20px;
     display:flex;
-
     justify-content:center;
-
     gap:15px;
 }
 
 .no-button{
-
     padding:10px 24px;
-
     border:none;
-
     border-radius:10px;
-
     background:#d9d9d9;
-
-    cursor:pointer;
-
-    font-family:"Song", serif;
 }
 
 .yes-button{
-
     padding:10px 24px;
-
     border:none;
-
     border-radius:10px;
-
     background:#555;
-
     color:white;
-
-    cursor:pointer;
-
-    font-family:"Song", serif;
 }
 
 </style>
@@ -211,77 +152,24 @@ body{
 
 <body>
 
-<div class="navigation">
+<!-- 菜单 -->
+<div class="menu">
 
-    <select onchange="jump(this.value)">
+    <button class="menu-button" onclick="toggleMenu()">跳转至</button>
 
-        <option value="">
-            跳转至
-        </option>
-
-        <option value="task.html">
-            任务书获取
-        </option>
-
-        <option value="submit.html">
-            答案提交
-        </option>
-
-        <option value="summary.html">
-            信息汇总
-        </option>
-
-    </select>
-
-</div>
-
-<div class="container">
-
-    <div class="hint-block">
-
-        <button
-            class="hint-button"
-            onclick="openModal('hint1')">
-
-            AAA
-
-        </button>
-
-        <div
-            id="hint1"
-            class="hint-text">
-
-            aaa
-
-        </div>
-
-    </div>
-
-    <div class="hint-block">
-
-        <button
-            class="hint-button"
-            onclick="openModal('hint2')">
-
-            BBB
-
-        </button>
-
-        <div
-            id="hint2"
-            class="hint-text">
-
-            bbb
-
-        </div>
-
+    <div id="menuList" class="menu-list">
+        <a href="index.html">首页</a>
+        <a href="task.html">工具箱</a>
+        <a href="submit.html">答案提交</a>
+        <a href="summary.html">信息汇总</a>
     </div>
 
 </div>
 
-<div
-    id="modal"
-    class="modal">
+<div class="container" id="container"></div>
+
+<!-- 弹窗 -->
+<div id="modal" class="modal">
 
     <div class="modal-content">
 
@@ -289,21 +177,8 @@ body{
 
         <div class="modal-buttons">
 
-            <button
-                class="no-button"
-                onclick="closeModal()">
-
-                否
-
-            </button>
-
-            <button
-                class="yes-button"
-                onclick="unlockHint()">
-
-                是
-
-            </button>
+            <button class="no-button" onclick="closeModal()">否</button>
+            <button class="yes-button" onclick="unlockHint()">是</button>
 
         </div>
 
@@ -313,82 +188,105 @@ body{
 
 <script>
 
-let currentHint = null;
+let currentId = null;
 
-/* 页面跳转 */
-
-function jump(page){
-
-    if(page){
-
-        window.location.href = page;
-
-    }
-
+/* 菜单 */
+function toggleMenu(){
+    const m = document.getElementById("menuList");
+    m.style.display = m.style.display === "block" ? "none" : "block";
 }
 
 /* 打开弹窗 */
-
 function openModal(id){
-
-    currentHint = id;
-
-    document.getElementById("modal")
-        .style.display = "flex";
+    currentId = id;
+    document.getElementById("modal").style.display = "flex";
 }
-
-/* 关闭弹窗 */
 
 function closeModal(){
-
-    document.getElementById("modal")
-        .style.display = "none";
+    document.getElementById("modal").style.display = "none";
 }
 
-/* 解锁提示 */
-
+/* 解锁 */
 function unlockHint(){
 
-    document.getElementById(currentHint)
-        .style.display = "block";
+    const el = document.querySelector(`[data-id="${currentId}"] .hint-text`);
+    el.style.display = "block";
 
-    localStorage.setItem(
-        currentHint,
-        "unlocked"
-    );
+    localStorage.setItem(currentId, "1");
 
     closeModal();
 }
 
-/* 页面加载时恢复存档 */
+/* CSV */
+fetch("hint.csv")
+.then(res => res.text())
+.then(csv => {
 
-window.onload = function(){
+    const lines = csv.trim().split("\n");
+    lines.shift();
 
-    const hintIds = [
+    const grouped = {};
+    const container = document.getElementById("container");
 
-        "hint1",
-        "hint2"
+    function normalize(type){
+        if(type.startsWith("PUZZLE")) return "PUZZLE";
+        return type;
+    }
 
-    ];
+    lines.forEach((line, index) => {
 
-    hintIds.forEach(id => {
+        const parts = line.split(",");
 
-        if(
-            localStorage.getItem(id)
-            === "unlocked"
-        ){
+        const name = parts[0].trim();
+        const hint = parts[1].trim();
+        const type = normalize(parts[2].trim());
 
-            document.getElementById(id)
-                .style.display = "block";
+        const id = "hint_" + index;
 
-        }
+        if(!grouped[type]) grouped[type] = [];
+        grouped[type].push({id, name, hint});
 
     });
 
-};
+    for(const type in grouped){
+
+        let html = `
+        <div class="section">
+            <div class="section-title">${type}</div>
+        `;
+
+        grouped[type].forEach(item => {
+
+            html += `
+            <div class="hint-block" data-id="${item.id}">
+
+                <button class="hint-button" onclick="openModal('${item.id}')">
+                    ${item.name}
+                </button>
+
+                <div class="hint-text">
+                    ${item.hint}
+                </div>
+
+            </div>
+            `;
+
+            if(localStorage.getItem(item.id)){
+                setTimeout(() => {
+                    const el = document.querySelector(`[data-id="${item.id}"] .hint-text`);
+                    if(el) el.style.display = "block";
+                }, 0);
+            }
+
+        });
+
+        html += `</div>`;
+        container.innerHTML += html;
+    }
+
+});
 
 </script>
 
 </body>
-
 </html>

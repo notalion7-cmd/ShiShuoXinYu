@@ -39,20 +39,23 @@ body{
     font-family:"Song", serif;
 }
 
-/* 左上角导航 */
+/* 导航菜单 */
 
-.navigation{
+.menu{
 
     position:fixed;
 
     top:25px;
 
     left:25px;
+
+    z-index:1000;
+
 }
 
-.navigation select{
+.menu-button{
 
-    padding:10px 15px;
+    padding:10px 18px;
 
     font-size:16px;
 
@@ -60,13 +63,52 @@ body{
 
     color:#444;
 
-    background:rgba(255,255,255,0.35);
+    background:rgba(255,255,255,0.5);
 
     border:1px solid rgba(0,0,0,0.08);
 
     border-radius:12px;
 
     cursor:pointer;
+
+}
+
+.menu-list{
+
+    display:none;
+
+    margin-top:8px;
+
+    background:rgba(255,255,255,0.95);
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    min-width:140px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+
+}
+
+.menu-list a{
+
+    display:block;
+
+    padding:12px 18px;
+
+    text-decoration:none;
+
+    color:#444;
+
+    font-family:"Song", serif;
+
+}
+
+.menu-list a:hover{
+
+    background:rgba(0,0,0,0.05);
+
 }
 
 /* 主体 */
@@ -108,7 +150,7 @@ input{
     box-sizing:border-box;
 }
 
-button{
+button.submit-button{
 
     margin-top:20px;
 
@@ -131,7 +173,7 @@ button{
     transition:0.3s;
 }
 
-button:hover{
+button.submit-button:hover{
 
     background:rgba(255,255,255,0.65);
 
@@ -157,27 +199,37 @@ button:hover{
 
 <body>
 
-<div class="navigation">
+<div class="menu">
 
-    <select onchange="jump(this.value)">
+    <button
+        class="menu-button"
+        onclick="toggleMenu()">
 
-        <option value="">
-            跳转至
-        </option>
+        跳转至
 
-        <option value="task.html">
-            任务书获取
-        </option>
+    </button>
 
-        <option value="hint.html">
+    <div
+        id="menuList"
+        class="menu-list">
+
+        <a href="index.html">
+            首页
+        </a>
+
+        <a href="task.html">
+            工具箱
+        </a>
+
+        <a href="hint.html">
             提示
-        </option>
+        </a>
 
-        <option value="summary.html">
+        <a href="summary.html">
             信息汇总
-        </option>
+        </a>
 
-    </select>
+    </div>
 
 </div>
 
@@ -193,8 +245,12 @@ button:hover{
 
     <br>
 
-    <button onclick="checkAnswer()">
+    <button
+        class="submit-button"
+        onclick="checkAnswer()">
+
         提交
+
     </button>
 
     <div id="result"></div>
@@ -203,15 +259,38 @@ button:hover{
 
 <script>
 
-function jump(page){
+function toggleMenu(){
 
-    if(page){
+    const menu =
+        document.getElementById("menuList");
 
-        window.location.href = page;
+    menu.style.display =
+        menu.style.display === "block"
+        ? "none"
+        : "block";
+
+}
+
+document.addEventListener("click", function(event){
+
+    const menu =
+        document.getElementById("menuList");
+
+    const button =
+        document.querySelector(".menu-button");
+
+    if(
+        menu &&
+        !menu.contains(event.target)
+        &&
+        !button.contains(event.target)
+    ){
+
+        menu.style.display = "none";
 
     }
 
-}
+});
 
 let questions = [];
 
@@ -220,8 +299,6 @@ fetch("questions.csv")
 .then(response => response.text())
 
 .then(csv => {
-
-    console.log(csv);
 
     const lines = csv.trim().split("\n");
 
@@ -310,6 +387,57 @@ function checkAnswer(){
 
     }
 
+    const puzzleIds = [
+
+        "PUZZLE1",
+        "PUZZLE2",
+        "PUZZLE3",
+        "PUZZLE4"
+
+    ];
+
+    if(puzzleIds.includes(id)){
+
+        let solvedCount = 0;
+
+        puzzleIds.forEach(pid => {
+
+            if(localStorage.getItem(pid)){
+
+                solvedCount++;
+
+            }
+
+        });
+
+        const puzzleHints = [
+
+            "本次探索的某个区域的名称也在这个公园名称里出现了",
+
+            "1000",
+
+            "秋千",
+
+            "龙吴路"
+
+        ];
+
+        const unlockedHint =
+            puzzleHints[solvedCount];
+
+        localStorage.setItem(
+            id,
+            unlockedHint
+        );
+
+        document.getElementById("result")
+            .innerHTML =
+            `提交成功<br><br>${unlockedHint}`;
+
+        return;
+
+    }
+
     localStorage.setItem(
         id,
         question.hint
@@ -317,7 +445,6 @@ function checkAnswer(){
 
     document.getElementById("result")
         .innerHTML =
-
         `提交成功<br><br>${question.hint}`;
 
 }
