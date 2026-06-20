@@ -25,7 +25,7 @@ body{
     font-family:"Song", serif;
 }
 
-/* 🌟 新增：左上角原生下拉框容器与样式 */
+/* 左上角原生下拉框容器与样式 */
 .nav-select-container {
     position: fixed;
     top: 25px;
@@ -45,7 +45,7 @@ body{
     outline: none;
     appearance: none;
     -webkit-appearance: none;
-    /* 引入一个精致的自定义小箭头 */
+    /* 精致的自定义小箭头 */
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0,0 L5,5 L10,0' fill='none' stroke='%23444' stroke-width='1.5'/></svg>");
     background-repeat: no-repeat;
     background-position: right 12px center;
@@ -61,9 +61,18 @@ body{
     color: #444;
 }
 
+/* 🌟 新增：大标题样式 */
+.page-title {
+    font-family: "Song", serif;
+    font-size: clamp(40px, 5vw, 56px); /* 响应式字号，手机上会自动缩小一点 */
+    color: #333;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
 .container{
     width:min(1000px,90vw);
-    margin:100px auto;
+    margin:60px auto 100px auto; /* 调整了顶边距，配合大标题的间距 */
 }
 
 .section{
@@ -80,7 +89,6 @@ body{
 .entry{
     margin-bottom:15px;
     padding-left:20px;
-    /* 关键修改：让关卡 ID 和内容在一行横向排列 */
     display: flex;
     align-items: flex-start;
 }
@@ -88,7 +96,6 @@ body{
 .entry-id{
     font-size:18px;
     font-weight: bold;
-    /* 固定 ID 宽度，保证后面的提示内容对齐 */
     min-width: 100px; 
     flex-shrink: 0;
 }
@@ -99,7 +106,7 @@ body{
     word-break: break-all;
 }
 
-/* 针对未解锁文本的样式（可选，让问号看起来更淡一点） */
+/* 针对未解锁文本的样式 */
 .locked {
     color: #ccc;
     letter-spacing: 2px;
@@ -113,21 +120,23 @@ body{
 
 <div class="nav-select-container">
     <select class="nav-select" onchange="navigate(this)">
-        <option value="" disabled>快速导航</option>
         <option value="index.html">首页</option>
         <option value="task.html">工具箱</option>
         <option value="hint.html">提示</option>
         <option value="submit.html">答案提交</option>
-        <option value="summary.html" selected>信息汇总</option> </select>
+        <option value="summary.html" selected>信息汇总</option>
+    </select>
 </div>
 
 <div class="container">
+    <div class="page-title">信息汇总</div>
+    
     <div id="content"></div>
 </div>
 
 <script>
 
-// 🌟 新增：下拉框跳转函数
+// 下拉框跳转函数
 function navigate(selectElement) {
     const url = selectElement.value;
     if (url) {
@@ -187,7 +196,7 @@ fetch("questions.csv")
                 "龙吴路"
             ];
 
-            // 1. 关键修改：计算出用户到底答对了几个 puzzle
+            // 计算出用户到底答对了几个 puzzle
             let unlockedCount = 0;
             puzzleIds.forEach(id => {
                 if(localStorage.getItem(id)) {
@@ -195,9 +204,8 @@ fetch("questions.csv")
                 }
             });
 
-            // 2. 根据答对的数量，按顺序（i 从 0 开始）渲染提示
+            // 根据答对的数量，按顺序渲染提示
             puzzleIds.forEach((id, i) => {
-                // 如果当前索引小于答对的总数，说明可以显示这个位置的提示
                 const hasUnlocked = i < unlockedCount;
                 const contentText = hasUnlocked ? puzzleHints[i] : `<span class="locked">？？？</span>`;
 

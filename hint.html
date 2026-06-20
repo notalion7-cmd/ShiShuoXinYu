@@ -2,7 +2,6 @@
 <html>
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -26,49 +25,54 @@ body{
     font-family:"Song", serif;
 }
 
-/* ===== 菜单 ===== */
-.menu{
-    position:fixed;
-    top:25px;
-    left:25px;
-    z-index:1000;
+/* 🌟 左上角原生下拉框容器与样式（与前面页面完全一致） */
+.nav-select-container {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    z-index: 1000;
 }
 
-.menu-button{
-    padding:10px 18px;
-    font-size:16px;
-    font-family:"HandWritten", serif;
-    background:rgba(255,255,255,0.5);
-    border:1px solid rgba(0,0,0,0.08);
-    border-radius:12px;
-    cursor:pointer;
+.nav-select {
+    padding: 10px 30px 10px 18px;
+    font-size: 16px;
+    font-family: "HandWritten", serif;
+    color: #444;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0,0 L5,5 L10,0' fill='none' stroke='%23444' stroke-width='1.5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
 }
 
-.menu-list{
-    display:none;
-    margin-top:8px;
-    background:rgba(255,255,255,0.95);
-    border-radius:12px;
-    min-width:140px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+.nav-select:hover {
+    background-color: rgba(255,255,255,0.8);
 }
 
-.menu-list a{
-    display:block;
-    padding:12px 18px;
-    text-decoration:none;
-    color:#444;
+.nav-select option {
+    font-family: "Song", serif;
+    background: #fff;
+    color: #444;
 }
 
-.menu-list a:hover{
-    background:rgba(0,0,0,0.05);
+/* 🌟 页面大标题 */
+.page-title {
+    font-family: "Song", serif;
+    font-size: clamp(40px, 5vw, 56px);
+    color: #333;
+    text-align: center;
+    margin-bottom: 60px;
 }
 
 /* ===== 主体 ===== */
-
 .container{
     width:min(1000px,90vw);
-    margin:100px auto;
+    margin: 60px auto 100px auto; /* 统一的外边距 */
 }
 
 .section{
@@ -76,34 +80,46 @@ body{
 }
 
 .section-title{
-    font-size:30px;
+    font-size:28px;
     margin-bottom:20px;
     border-bottom:1px solid rgba(0,0,0,0.1);
     padding-bottom:10px;
 }
 
 .hint-block{
-    margin-bottom:18px;
+    margin-bottom:20px;
 }
 
+/* 🌟 核心修改：将原本的按钮外观彻底改造成普通的、可点击的文本句子 */
 .hint-button{
-    padding:12px 24px;
-    background:rgba(255,255,255,0.35);
-    border:1px solid rgba(0,0,0,0.08);
-    border-radius:12px;
-    cursor:pointer;
-    font-size:18px;
+    display: inline-block;
+    padding: 0;
+    background: none;
+    border: none;
+    border-bottom: 1px dashed #888; /* 加一条淡淡的虚线暗示可以点击 */
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: "Song", serif;
+    color: #333;
+    text-align: left;
+    transition: color 0.2s;
+}
+
+.hint-button:hover {
+    color: #888; /* 悬浮时字变淡，给予点击反馈 */
 }
 
 .hint-text{
-    margin-top:10px;
-    margin-left:10px;
+    margin-top:12px;
+    margin-left:15px;
     display:none;
-    color:#333;
+    color:#666;
+    font-size:18px;
+    line-height: 1.6;
 }
 
 /* ===== 弹窗 ===== */
-
 .modal{
     display:none;
     position:fixed;
@@ -114,6 +130,7 @@ body{
     background:rgba(0,0,0,0.3);
     justify-content:center;
     align-items:center;
+    z-index: 2000;
 }
 
 .modal-content{
@@ -122,6 +139,8 @@ body{
     border-radius:15px;
     text-align:center;
     width:320px;
+    font-family: "Song", serif;
+    font-size: 18px;
 }
 
 .modal-buttons{
@@ -136,6 +155,9 @@ body{
     border:none;
     border-radius:10px;
     background:#d9d9d9;
+    font-family: "HandWritten", serif;
+    font-size: 16px;
+    cursor: pointer;
 }
 
 .yes-button{
@@ -144,6 +166,19 @@ body{
     border-radius:10px;
     background:#555;
     color:white;
+    font-family: "HandWritten", serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* 针对手机移动端的专属微调 */
+@media (max-width: 600px) {
+    .container {
+        margin: 90px auto 60px auto;
+    }
+    .page-title {
+        margin-bottom: 40px;
+    }
 }
 
 </style>
@@ -152,48 +187,42 @@ body{
 
 <body>
 
-<!-- 菜单 -->
-<div class="menu">
-
-    <button class="menu-button" onclick="toggleMenu()">跳转至</button>
-
-    <div id="menuList" class="menu-list">
-        <a href="index.html">首页</a>
-        <a href="task.html">工具箱</a>
-        <a href="submit.html">答案提交</a>
-        <a href="summary.html">信息汇总</a>
-    </div>
-
+<div class="nav-select-container">
+    <select class="nav-select" onchange="navigate(this)">
+        <option value="index.html">首页</option>
+        <option value="task.html">工具箱</option>
+        <option value="hint.html" selected>提示</option>
+        <option value="submit.html">答案提交</option>
+        <option value="summary.html">信息汇总</option>
+    </select>
 </div>
 
-<div class="container" id="container"></div>
+<div class="container">
+    <div class="page-title">提示</div>
+    
+    <div id="container"></div>
+</div>
 
-<!-- 弹窗 -->
 <div id="modal" class="modal">
-
     <div class="modal-content">
-
         是否确定解锁该提示？
-
         <div class="modal-buttons">
-
             <button class="no-button" onclick="closeModal()">否</button>
             <button class="yes-button" onclick="unlockHint()">是</button>
-
         </div>
-
     </div>
-
 </div>
 
 <script>
 
 let currentId = null;
 
-/* 菜单 */
-function toggleMenu(){
-    const m = document.getElementById("menuList");
-    m.style.display = m.style.display === "block" ? "none" : "block";
+// 下拉框跳转
+function navigate(selectElement) {
+    const url = selectElement.value;
+    if (url) {
+        window.location.href = url;
+    }
 }
 
 /* 打开弹窗 */
@@ -208,12 +237,10 @@ function closeModal(){
 
 /* 解锁 */
 function unlockHint(){
-
     const el = document.querySelector(`[data-id="${currentId}"] .hint-text`);
-    el.style.display = "block";
+    if(el) el.style.display = "block";
 
     localStorage.setItem(currentId, "1");
-
     closeModal();
 }
 
@@ -228,15 +255,15 @@ fetch("hint.csv")
     const grouped = {};
     const container = document.getElementById("container");
 
+    // 🌟 核心修改：移除原先的 normalize 合并逻辑，让 PUZZLE1, PUZZLE2 等保持原样独立分类
     function normalize(type){
-        if(type.startsWith("PUZZLE")) return "PUZZLE";
-        return type;
+        return type; 
     }
 
     lines.forEach((line, index) => {
+        if (!line.trim()) return;
 
         const parts = line.split(",");
-
         const name = parts[0].trim();
         const hint = parts[1].trim();
         const type = normalize(parts[2].trim());

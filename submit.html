@@ -22,67 +22,111 @@
 body{
     margin:0;
     min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
     background:#f8f8f6;
     font-family:"Song", serif;
 }
 
-/* 菜单 */
-.menu{
-    position:fixed;
-    top:25px;
-    left:25px;
-    z-index:1000;
+/* 左上角原生下拉框容器与样式（与 summary 界面完全一致） */
+.nav-select-container {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    z-index: 1000;
 }
 
-.menu-button{
-    padding:10px 18px;
-    font-size:16px;
-    font-family:"HandWritten", serif;
-    background:rgba(255,255,255,0.5);
-    border:1px solid rgba(0,0,0,0.08);
-    border-radius:12px;
-    cursor:pointer;
+.nav-select {
+    padding: 10px 30px 10px 18px;
+    font-size: 16px;
+    font-family: "HandWritten", serif;
+    color: #444;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0,0 L5,5 L10,0' fill='none' stroke='%23444' stroke-width='1.5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
 }
 
-.menu-list{
-    display:none;
-    margin-top:8px;
-    background:rgba(255,255,255,0.95);
-    border-radius:12px;
-    overflow:hidden;
-    min-width:140px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+.nav-select:hover {
+    background-color: rgba(255,255,255,0.8);
 }
 
-.menu-list a{
-    display:block;
-    padding:12px 18px;
-    text-decoration:none;
-    color:#444;
+.nav-select option {
+    font-family: "Song", serif;
+    background: #fff;
+    color: #444;
+}
+
+/* 页面大标题（与 summary 界面位置和样式完全一致） */
+.page-title {
+    font-family: "Song", serif;
+    font-size: clamp(40px, 5vw, 56px);
+    color: #333;
+    text-align: center;
+    margin-bottom: 60px;
 }
 
 .container{
     text-align:center;
-    width:min(700px,90vw);
+    width:min(1000px,90vw);
+    margin: 60px auto 100px auto; /* 与 summary 完全相同的上下边距 */
+}
+
+/* 输入框和按钮样式 */
+.input-tip {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 20px;
 }
 
 input{
-    width:90%;
-    padding:14px;
-    font-size:18px;
+    width: min(600px, 85%); /* 限制最大宽度，在宽屏上更美观 */
+    padding: 14px;
+    font-size: 18px;
+    font-family: "Song", serif;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.6);
+    outline: none;
+    box-sizing: border-box;
 }
 
 button{
     margin-top:20px;
-    padding:12px 30px;
+    padding:12px 40px;
+    font-size: 18px;
+    font-family: "HandWritten", serif;
+    cursor: pointer;
+    background: rgba(255,255,255,0.8);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 #result{
-    margin-top:30px;
-    font-size:20px;
+    margin-top:40px;
+    font-size:22px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* 针对手机移动端的专属微调 */
+@media (max-width: 600px) {
+    .container {
+        margin: 90px auto 60px auto;
+    }
+    .page-title {
+        margin-bottom: 40px;
+    }
 }
 
 </style>
@@ -90,23 +134,25 @@ button{
 
 <body>
 
-<div class="menu">
-    <button class="menu-button" onclick="toggleMenu()">跳转至</button>
-
-    <div id="menuList" class="menu-list">
-        <a href="index.html">首页</a>
-        <a href="task.html">工具箱</a>
-        <a href="hint.html">提示</a>
-        <a href="summary.html">信息汇总</a>
-    </div>
+<div class="nav-select-container">
+    <select class="nav-select" onchange="navigate(this)">
+        <option value="index.html">首页</option>
+        <option value="task.html">工具箱</option>
+        <option value="hint.html">提示</option>
+        <option value="submit.html" selected>答案提交</option>
+        <option value="summary.html">信息汇总</option>
+    </select>
 </div>
 
 <div class="container">
 
-    <div>请按格式提交：题号 空格 答案</div>
+    <div class="page-title">答案提交</div>
 
-    <input id="answer" placeholder="A1 123">
+    <div class="input-tip">请按格式提交：题号 空格 答案</div>
 
+    <input id="answer" placeholder="例如：A1 徐光启">
+
+    <br>
     <button onclick="checkAnswer()">提交</button>
 
     <div id="result"></div>
@@ -115,39 +161,37 @@ button{
 
 <script>
 
-function toggleMenu(){
-    const m = document.getElementById("menuList");
-    m.style.display = m.style.display === "block" ? "none" : "block";
+// 下拉框跳转
+function navigate(selectElement) {
+    const url = selectElement.value;
+    if (url) {
+        window.location.href = url;
+    }
 }
 
-/* CSV */
+/* CSV 数据加载 */
 let questions = [];
 
 fetch("questions.csv")
 .then(r => r.text())
 .then(csv => {
-
     const lines = csv.trim().split("\n");
     lines.shift();
 
     lines.forEach(line => {
-
+        if (!line.trim()) return;
         const parts = line.split(",");
-
         questions.push({
             id: parts[0].trim().toUpperCase(),
             question: parts[1],
             answer: parts[2],
             hint: parts[3],
-            area: parts[4]
+            area: parts[4].trim()
         });
-
     });
-
 });
 
 function checkAnswer(){
-
     const input = document.getElementById("answer").value.trim();
     const pieces = input.split(" ");
 
@@ -176,10 +220,32 @@ function checkAnswer(){
         return;
     }
 
-    localStorage.setItem(id, q.hint);
+    // 针对 PUZZLE 模块的线性解锁逻辑
+    let finalHint = q.hint;
+
+    if(q.area === "PUZZLE") {
+        const puzzleHintsOrder = [
+            "本次探索的某个区域的名称也在这个公园名称里出现了",
+            "1000",
+            "秋千",
+            "龙吴路"
+        ];
+        
+        const puzzleIds = ["PUZZLE1","PUZZLE2","PUZZLE3","PUZZLE4"];
+        let currentUnlockedCount = 0;
+        puzzleIds.forEach(pId => {
+            if(localStorage.getItem(pId)) {
+                currentUnlockedCount++;
+            }
+        });
+
+        finalHint = puzzleHintsOrder[currentUnlockedCount] || "所有谜题已解开";
+    }
+
+    localStorage.setItem(id, finalHint);
 
     document.getElementById("result").innerHTML =
-        "提交成功<br><br>" + q.hint;
+        "✨ 提交成功！<br><br><strong>获得线索：</strong>" + finalHint;
 }
 
 </script>

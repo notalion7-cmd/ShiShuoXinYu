@@ -4,216 +4,136 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>工具箱</title>
 
 <style>
 
 @font-face {
-
     font-family: "Song";
-
     src: url("Font/Song.ttf") format("truetype");
-
 }
 
 @font-face {
-
     font-family: "HandWritten";
-
     src: url("Font/HandWritten.ttf") format("truetype");
-
 }
 
 body{
-
     margin:0;
-
     min-height:100vh;
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     background:#f8f8f6;
-
     font-family:"Song", serif;
-
 }
 
-/* 导航菜单 */
-
-.menu{
-
-    position:fixed;
-
-    top:25px;
-
-    left:25px;
-
-    z-index:1000;
-
+/* 🌟 左上角原生下拉框容器与样式（与其它界面完全一致） */
+.nav-select-container {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    z-index: 1000;
 }
 
-.menu-button{
-
-    padding:10px 18px;
-
-    font-size:16px;
-
-    font-family:"HandWritten", serif;
-
-    color:#444;
-
-    background:rgba(255,255,255,0.5);
-
-    border:1px solid rgba(0,0,0,0.08);
-
-    border-radius:12px;
-
-    cursor:pointer;
-
+.nav-select {
+    padding: 10px 30px 10px 18px;
+    font-size: 16px;
+    font-family: "HandWritten", serif;
+    color: #444;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0,0 L5,5 L10,0' fill='none' stroke='%23444' stroke-width='1.5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
 }
 
-.menu-list{
-
-    display:none;
-
-    margin-top:8px;
-
-    background:rgba(255,255,255,0.95);
-
-    border-radius:12px;
-
-    overflow:hidden;
-
-    min-width:140px;
-
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
-
+.nav-select:hover {
+    background-color: rgba(255,255,255,0.8);
 }
 
-.menu-list a{
-
-    display:block;
-
-    padding:12px 18px;
-
-    text-decoration:none;
-
-    color:#444;
-
-    font-family:"Song", serif;
-
-    transition:0.2s;
-
+.nav-select option {
+    font-family: "Song", serif;
+    background: #fff;
+    color: #444;
 }
 
-.menu-list a:hover{
-
-    background:rgba(0,0,0,0.05);
-
+/* 🌟 页面大标题（与前面页面完全一致的样式与行高） */
+.page-title {
+    font-family: "Song", serif;
+    font-size: clamp(40px, 5vw, 56px);
+    color: #333;
+    text-align: center;
+    margin-bottom: 60px;
 }
 
 /* 主体 */
-
 .container{
-
-    width:min(700px,90vw);
-
+    width:min(1000px,90vw); /* 统一宽度基准 */
+    margin: 120px auto 100px auto; /* 给予顶部下拉框和内容舒适的呼吸感空间 */
     text-align:center;
-
 }
 
-.title{
-
-    font-size:clamp(40px,5vw,64px);
-
-    color:#333;
-
-    margin-bottom:50px;
-
+/* 如果屏幕比较宽，限制工具栏的最大展示宽度以防拉得太长 */
+.tool-box-content {
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .tool-row{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     margin:25px 0;
-
     padding:18px 24px;
-
     background:rgba(255,255,255,0.35);
-
     border:1px solid rgba(0,0,0,0.08);
-
     border-radius:14px;
-
 }
 
 .tool-name{
-
     font-size:24px;
-
     color:#444;
-
 }
 
 .tool-button{
-
     padding:10px 24px;
-
     text-decoration:none;
-
     color:#444;
-
     font-size:18px;
-
     background:rgba(255,255,255,0.5);
-
     border:1px solid rgba(0,0,0,0.08);
-
     border-radius:10px;
-
     transition:0.3s;
-
 }
 
 .tool-button:hover{
-
     background:rgba(255,255,255,0.8);
-
     transform:translateY(-2px);
-
 }
 
 /* 手机适配 */
-
 @media (max-width:600px){
-
+    .container {
+        margin: 90px auto 60px auto;
+    }
+    .page-title {
+        margin-bottom: 40px;
+    }
     .tool-row{
-
         flex-direction:column;
-
         gap:15px;
-
     }
-
     .tool-name{
-
         font-size:20px;
-
     }
-
 }
 
 </style>
@@ -222,137 +142,48 @@ body{
 
 <body>
 
-<div class="menu">
-
-    <button
-        class="menu-button"
-        onclick="toggleMenu()">
-
-        跳转至
-
-    </button>
-
-    <div
-        id="menuList"
-        class="menu-list">
-
-        <a href="index.html">
-            首页
-        </a>
-
-        <a href="submit.html">
-            答案提交
-        </a>
-
-        <a href="hint.html">
-            提示
-        </a>
-
-        <a href="summary.html">
-            信息汇总
-        </a>
-
-    </div>
-
+<div class="nav-select-container">
+    <select class="nav-select" onchange="navigate(this)">
+        <option value="index.html">首页</option>
+        <option value="task.html" selected>工具箱</option>
+        <option value="hint.html">提示</option>
+        <option value="submit.html">答案提交</option>
+        <option value="summary.html">信息汇总</option>
+    </select>
 </div>
 
 <div class="container">
 
-    <div class="title">
-        工具箱
-    </div>
+    <div class="page-title">工具箱</div>
 
-    <div class="tool-row">
-
-        <div class="tool-name">
-            任务书获取
+    <div class="tool-box-content">
+        <div class="tool-row">
+            <div class="tool-name">任务书获取</div>
+            <a class="tool-button" href="taskbook.pdf" download>下载</a>
         </div>
 
-        <a
-            class="tool-button"
-            href="taskbook.pdf"
-            download>
-
-            下载
-
-        </a>
-
-    </div>
-
-    <div class="tool-row">
-
-        <div class="tool-name">
-            Key高清图片获取
+        <div class="tool-row">
+            <div class="tool-name">Key高清图片获取</div>
+            <a class="tool-button" href="key.jpg" download>下载</a>
         </div>
 
-        <a
-            class="tool-button"
-            href="key.jpg"
-            download>
-
-            下载
-
-        </a>
-
-    </div>
-
-    <div class="tool-row">
-
-        <div class="tool-name">
-            地铁线路图
+        <div class="tool-row">
+            <div class="tool-name">地铁线路图</div>
+            <a class="tool-button" href="https://www.metroman.cn/maps/shanghai" target="_blank">前往</a>
         </div>
-
-        <a
-            class="tool-button"
-            href="https://www.metroman.cn/maps/shanghai"
-            target="_blank">
-
-            前往
-
-        </a>
-
     </div>
 
 </div>
 
 <script>
 
-function toggleMenu(){
-
-    const menu =
-        document.getElementById("menuList");
-
-    if(menu.style.display === "block"){
-
-        menu.style.display = "none";
-
-    }else{
-
-        menu.style.display = "block";
-
+// 下拉框跳转函数
+function navigate(selectElement) {
+    const url = selectElement.value;
+    if (url) {
+        window.location.href = url;
     }
-
 }
-
-document.addEventListener("click", function(event){
-
-    const menu =
-        document.getElementById("menuList");
-
-    const button =
-        document.querySelector(".menu-button");
-
-    if(
-        !menu.contains(event.target)
-        &&
-        !button.contains(event.target)
-    ){
-
-        menu.style.display = "none";
-
-    }
-
-});
 
 </script>
 
