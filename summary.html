@@ -92,11 +92,10 @@ fetch("questions.csv")
     lines.shift(); // 移除表头
 
     let grouped = {};
-    // 根据映射，把 CSV 的真实区域名作为 group 的 key
     Object.values(areaMapping).forEach(a => grouped[a] = []);
 
     lines.forEach(line => {
-        if (!line.trim()) return; // 略过空行
+        if (!line.trim()) return;
 
         const parts = line.split(",");
         const id = parts[0].trim().toUpperCase();
@@ -124,9 +123,18 @@ fetch("questions.csv")
                 "龙吴路"
             ];
 
+            // 1. 关键修改：计算出用户到底答对了几个 puzzle
+            let unlockedCount = 0;
+            puzzleIds.forEach(id => {
+                if(localStorage.getItem(id)) {
+                    unlockedCount++;
+                }
+            });
+
+            // 2. 根据答对的数量，按顺序（i 从 0 开始）渲染提示
             puzzleIds.forEach((id, i) => {
-                const hasUnlocked = localStorage.getItem(id);
-                // 如果解锁了显示硬编码提示，没解锁显示 ？？？
+                // 如果当前索引小于答对的总数，说明可以显示这个位置的提示
+                const hasUnlocked = i < unlockedCount;
                 const contentText = hasUnlocked ? puzzleHints[i] : `<span class="locked">？？？</span>`;
 
                 html += `
@@ -141,8 +149,6 @@ fetch("questions.csv")
             /* 普通区域处理 */
             grouped[csvAreaName].forEach(id => {
                 const text = localStorage.getItem(id);
-                // 修改点：不再使用 if(!text) return 隐去。
-                // 而是判断如果没有 text，则显示为 "？？？"
                 const contentText = text ? text : `<span class="locked">？？？</span>`;
 
                 html += `
