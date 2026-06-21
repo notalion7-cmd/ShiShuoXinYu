@@ -25,15 +25,16 @@ body{
     font-family:"Song", serif;
 }
 
-/* 左上角原生下拉框容器与样式 */
+/* 🌟 修改：自制下拉框容器与样式（全站完美统一，防止唤醒移动端原生黑框） */
 .nav-select-container {
     position: fixed;
     top: 25px;
     left: 25px;
     z-index: 1000;
+    display: inline-block;
 }
 
-.nav-select {
+.nav-select-button {
     padding: 10px 30px 10px 18px;
     font-size: 16px;
     font-family: "Song", serif;
@@ -43,22 +44,42 @@ body{
     border-radius: 12px;
     cursor: pointer;
     outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    /* 精致的自定义小箭头 */
+    position: relative;
+    text-align: left;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0,0 L5,5 L10,0' fill='none' stroke='%23444' stroke-width='1.5'/></svg>");
     background-repeat: no-repeat;
     background-position: right 12px center;
 }
 
-.nav-select:hover {
+.nav-select-button:hover {
     background-color: rgba(255,255,255,0.8);
 }
 
-.nav-select option {
-    font-family: "Song", serif;
-    background: #fff;
+.nav-dropdown-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 140px;
+    margin-top: 8px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.nav-dropdown-list a {
+    display: block;
+    padding: 12px 18px;
+    text-decoration: none;
     color: #444;
+    font-family: "Song", serif;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.nav-dropdown-list a:hover {
+    background: rgba(0,0,0,0.05);
 }
 
 /* 🌟 新增：大标题样式 */
@@ -112,6 +133,16 @@ body{
     letter-spacing: 2px;
 }
 
+/* 针对手机移动端的专属微调 */
+@media (max-width: 600px) {
+    .container {
+        margin: 90px auto 60px auto;
+    }
+    .page-title {
+        margin-bottom: 40px;
+    }
+}
+
 </style>
 
 </head>
@@ -119,13 +150,14 @@ body{
 <body>
 
 <div class="nav-select-container">
-    <select class="nav-select" onchange="navigate(this)">
-        <option value="index.html">首页</option>
-        <option value="task.html">工具箱</option>
-        <option value="hint.html">提示</option>
-        <option value="submit.html">答案提交</option>
-        <option value="summary.html" selected>信息汇总</option>
-    </select>
+    <button class="nav-select-button" onclick="toggleNavMenu(event)">信息汇总</button>
+    <div id="navDropdownList" class="nav-dropdown-list">
+        <a href="index.html">首页</a>
+        <a href="task.html">工具箱</a>
+        <a href="hint.html">提示</a>
+        <a href="submit.html">答案提交</a>
+        <a href="summary.html">信息汇总</a>
+    </div>
 </div>
 
 <div class="container">
@@ -136,13 +168,20 @@ body{
 
 <script>
 
-// 下拉框跳转函数
-function navigate(selectElement) {
-    const url = selectElement.value;
-    if (url) {
-        window.location.href = url;
-    }
+// 🌟 修改：控制自制下拉框的展开与收起
+function toggleNavMenu(event) {
+    event.stopPropagation(); // 阻止冒泡
+    const menu = document.getElementById("navDropdownList");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
 }
+
+// 🌟 修改：点击页面其它空白区域时，自动把下拉框收起来
+document.addEventListener("click", function(event) {
+    const menu = document.getElementById("navDropdownList");
+    if (menu) {
+        menu.style.display = "none";
+    }
+});
 
 // 保持你期望的页面显示顺序
 const areaOrder = ["启程","区域A","区域B","区域C","区域D","PUZZLE"];
